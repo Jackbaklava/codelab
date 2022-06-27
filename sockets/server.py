@@ -1,7 +1,7 @@
 import socket
 import threading # A way of creating multiple threads in a single python program
 
-# Max size of a message in bytes
+# Max size of a number of digits
 HEADER = 64
 FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!DISCONNECT"
@@ -25,7 +25,6 @@ def handle_client(conn, address):
         # .recv() Waits to recieve something from client and so also blocks execution, returns a byte object
         # arg1 (bufsize): max amount of data to be recieved at once in bytes, should be a power of 2 like 4096
         # decode turns byte object into readable string (FORMAT)
-        # msg = conn.recv(4096).decode(MSG_FORMAT)
         # First message sent is the length of the message
         msg_length = conn.recv(HEADER).decode(FORMAT) # "12"
         if msg_length:
@@ -37,6 +36,7 @@ def handle_client(conn, address):
                 connected = False
 
             print(f"[{address}] {msg}")
+            conn.send("Message recieved".encode(FORMAT))
 
     # Closes client connection socket
     conn.close()
@@ -45,7 +45,7 @@ def handle_client(conn, address):
 def start():
     server.listen()
     print(f"[LISTENING] Server is listening on ({HOST}, {PORT})")
-    # Server will listen until it crashes or the while loop is exitted
+    # Server will listen (look for client connections) until it crashes or the while loop is exited
     while True:
         # Accepts connection from client, also blocks execution until a client connects
         # conn -> client socket, address -> (HOST, PORT) of client

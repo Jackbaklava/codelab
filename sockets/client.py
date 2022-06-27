@@ -18,6 +18,7 @@ def send(msg):
     # Both arguments are combined and sent to the server, the server decides with the arg of .recv() to decide how much data to recieve at once. So, we have to pad send_length so that its the first thing recieved
     client.send(send_length)
     client.send(message)
+    print(client.recv(2048).decode(server.FORMAT))
 
 
 send("Hello World!")
